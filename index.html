@@ -1075,7 +1075,15 @@
       nav { padding: 14px 20px; }
       nav.scrolled { padding: 10px 20px; }
       section { padding: 60px 20px; }
-      .masonry { columns: 2; }
+      .masonry {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        columns: unset;
+        column-gap: unset;
+      }
+      .mas-item { break-inside: unset; margin-bottom: 0; }
+      .mas-item img { aspect-ratio: 1; object-fit: cover; border-radius: 10px; }
       .onas-img-wrap { display: none; }
       .onas-stats { grid-template-columns: repeat(3,1fr); }
       .onas-stats .stat-num { font-size: 22px; }
