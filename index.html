@@ -1504,26 +1504,31 @@
       <div class="form-header-label">Napisz do nas</div>
       <h2 class="form-heading">Skontaktuj się<br><em>z nami</em></h2>
       <p class="form-desc">Masz pytanie, sugestię lub chcesz zarezerwować miejsce? Napisz — odpowiadamy w ciągu jednego dnia roboczego.</p>
-      <form onsubmit="return false;">
+      <form id="kontaktForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="79f22523-eb0a-4633-918c-3d687b604f17">
+        <input type="hidden" name="subject" value="Nowa wiadomość ze strony Jak w Ulu">
+        <input type="hidden" name="from_name" value="Jak w Ulu – formularz kontaktowy">
+        <input type="checkbox" name="botcheck" style="display:none">
         <div class="form-row">
           <div class="form-field">
             <label class="form-label">Imię i Nazwisko</label>
-            <input class="form-input" type="text" placeholder="Jan Kowalski">
+            <input class="form-input" type="text" name="name" placeholder="Jan Kowalski" required>
           </div>
           <div class="form-field">
             <label class="form-label">Telefon</label>
-            <input class="form-input" type="tel" placeholder="600 000 000">
+            <input class="form-input" type="tel" name="phone" placeholder="600 000 000">
           </div>
         </div>
         <div class="form-field">
           <label class="form-label">Adres e-mail</label>
-          <input class="form-input" type="email" placeholder="jan@example.com">
+          <input class="form-input" type="email" name="email" placeholder="jan@example.com" required>
         </div>
         <div class="form-field">
           <label class="form-label">Wiadomość</label>
-          <textarea class="form-textarea" placeholder="W czym możemy pomóc?"></textarea>
+          <textarea class="form-textarea" name="message" placeholder="W czym możemy pomóc?" required></textarea>
         </div>
-        <button class="form-submit" type="submit">Wyślij wiadomość →</button>
+        <button class="form-submit" type="submit" id="formBtn">Wyślij wiadomość →</button>
+        <p id="formMsg" style="margin-top:16px;font-family:'sofia-pro',sans-serif;font-size:15px;display:none;"></p>
       </form>
     </div>
   </div>
@@ -1594,6 +1599,39 @@ document.querySelectorAll('.acc-head').forEach(head => {
       body.style.maxHeight = body.scrollHeight + 'px';
     }
   });
+});
+
+/* ===== KONTAKT FORM ===== */
+const kontaktForm = document.getElementById('kontaktForm');
+const formBtn     = document.getElementById('formBtn');
+const formMsg     = document.getElementById('formMsg');
+
+kontaktForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  formBtn.disabled = true;
+  formBtn.textContent = 'Wysyłanie…';
+  formMsg.style.display = 'none';
+
+  const data = new FormData(kontaktForm);
+  try {
+    const res  = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+    const json = await res.json();
+    if (json.success) {
+      formMsg.style.color = '#2C1A0E';
+      formMsg.textContent = '✓ Wiadomość wysłana! Odpiszemy wkrótce.';
+      kontaktForm.reset();
+      formBtn.textContent = 'Wyślij wiadomość →';
+      formBtn.disabled = false;
+    } else {
+      throw new Error();
+    }
+  } catch {
+    formMsg.style.color = '#c0392b';
+    formMsg.textContent = '✗ Coś poszło nie tak. Spróbuj ponownie lub zadzwoń do nas.';
+    formBtn.textContent = 'Wyślij wiadomość →';
+    formBtn.disabled = false;
+  }
+  formMsg.style.display = 'block';
 });
 
 /* ===== FAQ ACCORDION ===== */
