@@ -21,6 +21,9 @@
 
     html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
+    html {
+      overflow-x: hidden;
+    }
     body {
       font-family: 'sofia-pro', Georgia, serif;
       color: var(--dark);
@@ -40,21 +43,8 @@
       will-change: left, top;
       transition: transform 0.15s ease;
     }
-
     @media (hover: none) {
-      body  { cursor: auto; }
-      #bee  { animation: beeWander 14s ease-in-out infinite; }
-    }
-
-    @keyframes beeWander {
-      0%   { top:15%; left:12%; }
-      15%  { top:65%; left:75%; }
-      30%  { top:40%; left:55%; }
-      45%  { top:80%; left:25%; }
-      60%  { top:20%; left:80%; }
-      75%  { top:55%; left:10%; }
-      90%  { top:10%; left:45%; }
-      100% { top:15%; left:12%; }
+      #bee { display: none; }
     }
 
     /* ===== NAV ===== */
